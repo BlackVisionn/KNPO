@@ -41,7 +41,7 @@ string readFile(string path);
 /*! Запись результата выполнения программы в txt файл
 	\param[in] FinalFraction результат выполнения программы
 */
-void writeToFile(string FinalFraction);
+void writeToFile(string Result, string pathOut);
 
 class Exception :public exception
 {
