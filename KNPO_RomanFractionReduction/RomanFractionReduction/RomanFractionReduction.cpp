@@ -2,10 +2,12 @@
 #include <string>
 #include <fstream>
 #include "Prototypes.h"
+#include <Windows.h>
 using namespace std;
 int main()
 {
-    setlocale(LC_ALL, "ru");
+    SetConsoleCP(1251); // Установка кодовой страницы win-cp 1251 в поток ввода
+    SetConsoleOutputCP(1251); // Установка кодовой страницы win-cp 1251 в поток вывода
     string pathIn;
     string pathOut;
     string Fraction;
