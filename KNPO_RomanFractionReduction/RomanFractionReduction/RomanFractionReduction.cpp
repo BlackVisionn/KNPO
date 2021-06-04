@@ -138,3 +138,149 @@ void writeToFile(string Result, string pathOut)
     writeToFile.close(); // Закрытие файла
 }
 
+/*! Перевод римского числа в арабское
+    \param[in] RimNumber строка содержащая число в римской системе счисления
+    \param[out] ArabiсNumber арабское число переведеденное из римской системы счисления
+*/
+int ConvertToArabicNumber(string RimNumber)
+{
+    int ArabicNumber = 0;
+
+    for (int i = 0; i < RimNumber.length(); i++)
+    {
+
+        //Если встретился символ I
+        if (RimNumber[i] == 'I')
+        {
+            ArabicNumber += 1;
+            if (RimNumber[i + 1] == 'V')
+            {
+                ArabicNumber += 3;
+                i++;
+            }
+            if (RimNumber[i + 1] == 'X')
+            {
+                ArabicNumber += 8;
+                i++;
+            }
+        }
+
+        //Если встретился символ V
+        if (RimNumber[i] == 'V')
+        {
+            //Если символ стоит на первой позиции
+            if (i == 0)
+            {
+                ArabicNumber += 5;
+            }
+            //Иначе текущий символ стоит не на первой позиции и если предыдущий символ не равен 1
+            else if (RimNumber[i - 1] != 'I')
+            {
+                ArabicNumber += 5;
+            }
+        }
+
+        //Если встретился символ X
+        if (RimNumber[i] == 'X')
+        {
+            //Если символ стоит на первой позиции
+            if (i == 0)
+            {
+                ArabicNumber += 10;
+            }
+            //Иначе текущий символ стоит не на первой позиции и если предыдущий символ не равен 1
+            else if (RimNumber[i - 1] != 'I')
+            {
+                ArabicNumber += 10;
+            }
+            //Если следующий элемент 50
+            if (RimNumber[i + 1] == 'L')
+            {
+                ArabicNumber += 30;
+                i++;
+            }
+            //Если следующий элемент 100
+            if (RimNumber[i + 1] == 'C')
+            {
+                ArabicNumber += 80;
+                i++;
+            }
+        }
+
+        //Если встретился символ L
+        if (RimNumber[i] == 'L')
+        {
+            //Если символ стоит на первой позиции
+            if (i == 0)
+            {
+                ArabicNumber += 50;
+            }
+            //Иначе текущий символ стоит не на первой позиции и если предыдущий символ не равен 10
+            else if (RimNumber[i - 1] != 'X')
+            {
+                ArabicNumber += 50;
+            }
+        }
+
+
+        //Если встретился символ C
+        if (RimNumber[i] == 'C')
+        {
+            //Если символ стоит на первой позиции
+            if (i == 0)
+            {
+                ArabicNumber += 100;
+            }
+            //Иначе текущий символ стоит не на первой позиции и если предыдущий символ не равен 10
+            else if (RimNumber[i - 1] != 'X')
+            {
+                ArabicNumber += 100;
+            }
+
+            //Если следующий элемент 500
+            if (RimNumber[i + 1] == 'D')
+            {
+                ArabicNumber += 300;
+                i++;
+            }
+            //Если следующий элемент 1000
+            if (RimNumber[i + 1] == 'M')
+            {
+                ArabicNumber += 800;
+                i++;
+            }
+        }
+
+        //Если встретился символ D        
+        if (RimNumber[i] == 'D')
+        {
+            //Если символ стоит на первой позиции
+            if (i == 0)
+            {
+                ArabicNumber += 500;
+            }
+            //Иначе текущий символ стоит не на первой позиции и если предыдущий символ не равен 100
+            else if (RimNumber[i - 1] != 'C')
+            {
+                ArabicNumber += 500;
+            }
+        }
+
+        //Если встретился символ M
+        if (RimNumber[i] == 'M')
+        {
+            //Если символ стоит на первой позиции
+            if (i == 0)
+            {
+                ArabicNumber += 1000;
+            }
+            //Иначе текущий символ стоит не на первой позиции и если предыдущий символ не равен 100
+            else if (RimNumber[i - 1] != 'C')
+            {
+                ArabicNumber += 1000;
+            }
+        }
+    }   
+
+    return ArabicNumber;
+}
