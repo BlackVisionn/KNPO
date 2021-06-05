@@ -396,3 +396,55 @@ string ConvertToRimNumber(int ArabicNumber)
 
     return RimNumber;
 }
+
+/*! Формирование сокращенной римской дроби
+    \param[in] RimNumber строка которую ввел пользователь
+    \param[out] FinalFraction сокращенная дробь в римской системе счисления, записанная в виде строки
+*/
+string FormationOfAbbreviatedRomanFraction(string Fraction)
+{
+    string RimNumerator; // Числитель в римской системе счисления
+    string RimDenominator; // Знаменатель в римской системе счисления
+    string AbbreviatedFraction; // Сокращенная дробь в римской системе счисления
+    int ArabicNumerator; // Числитель в арабской системе счисления
+    int ArabicDenominator; // Знаменатель в арабской системе счисления
+    int AbbreviatedValues[2] = {}; // Массив хранящий сокращенные значения числителя и знаменателя
+    
+
+    RimNumerator = Fraction.substr(0, Fraction.find('/')); // Числитель дроби в римской системе счисления
+    RimDenominator = Fraction.substr(Fraction.find('/') + 1); // Знаменатель дроби в римской системе счисления
+
+    // Перевод числителя и знаменателя в арабскую систему счисления
+    ArabicNumerator = ConvertToArabicNumber(RimNumerator);
+
+    ArabicDenominator = ConvertToArabicNumber(RimDenominator);
+
+    // Сокращение числителя и знаменателя дроби
+    FractionReduction(AbbreviatedValues, ArabicNumerator, ArabicDenominator);
+
+    // Присвоение сокращенных значений числителя и знаменателя
+    ArabicNumerator = AbbreviatedValues[0];
+    ArabicDenominator = AbbreviatedValues[1];
+    
+    // Если после сокращения знаменатель 1
+    if (ArabicDenominator == 1)
+    {
+        // Перевести числитель в римскую систему счисления
+        RimNumerator = ConvertToRimNumber(ArabicNumerator);
+
+        // Сбор сокращенной дроби в римской системе счисления
+        AbbreviatedFraction += RimNumerator;
+    }
+    else
+    {
+        // Перевод числителя и знаменателя в римскую систему счисления
+        RimNumerator = ConvertToRimNumber(ArabicNumerator);
+        
+        RimDenominator = ConvertToRimNumber(ArabicDenominator);
+
+        // Сбор сокращенной дроби в римской системе счисления
+        AbbreviatedFraction += RimNumerator + '/' + RimDenominator;
+    }
+    
+    return AbbreviatedFraction;
+}
