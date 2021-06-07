@@ -126,6 +126,7 @@ void writeToFile(string Result, string pathOut)
 
     // Запись результата работы программы в файл
     ofstream writeToFile;
+    writeToFile.open(pathOut);
     if (!writeToFile.is_open()) // Неверный путь к файлу
     {
         throw Exception("Неверно указан файл с выходными данными. Возможно файл не существует", "4");
