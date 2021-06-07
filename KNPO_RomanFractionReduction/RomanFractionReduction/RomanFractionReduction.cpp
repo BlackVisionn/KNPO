@@ -449,3 +449,96 @@ string FormationOfAbbreviatedRomanFraction(string Fraction)
     
     return AbbreviatedFraction;
 }
+
+/*! Проверка наличия и корректности дроби
+    \param[in] Fraction строка которую ввел пользователь
+    \param[out] Fraction если содержимое прошло проверку или Error если содержимое не соответсвует заданному формату
+*/
+string FractionCheck(string Fraction)
+{
+    int lenght = Fraction.length(); // Длина строки
+    string numerator; // Числитель
+    string denominator; // Знаменатель
+    int countM = 0; // Кол-во символов M
+
+
+    numerator = Fraction.substr(0, Fraction.find('/'));
+    denominator = Fraction.substr(Fraction.find('/') + 1);
+
+    //Пустая строка
+    if (Fraction.empty())
+    {
+        throw Exception("Неудалось обнаружить дробь", "5");
+    }
+
+    //Отсутсвует знак деления между римскими числами
+    if (Fraction.find("/") == string::npos)
+    {
+        throw Exception("Отсутствует знак деления между римскими числами", "6");
+    }
+
+    //Присутсвуют пробелы
+    for (int i = 0; i < lenght; i++)
+    {
+        if (Fraction[i] == ' ')
+        {
+            throw Exception("Неверный формат записи дроби", "7");
+        }
+    }
+
+    //Неизвестный символ используйте римские числа
+    for (int i = 0; i < lenght; i++)
+    {
+        if ((Fraction[i] != 'I') && (Fraction[i] != 'V') && (Fraction[i] != 'X') && (Fraction[i] != 'L') && (Fraction[i] != 'C') && (Fraction[i] != 'D') && (Fraction[i] != 'M') && (Fraction[i] != '/'))
+        {
+            throw Exception("Введены недопустимые символы. Используйте I, V, X, L, C, D, M для записи римского числа", "8");
+        }
+    }
+
+    //Отсутствие числителя или знаменателя дроби
+    for (int i = 0; i < lenght; i++)
+    {
+        //Отсутсвует числитель дроби
+        if (Fraction[i] == '/' && Fraction[i - 1] == '\0')
+        {
+            throw Exception("Отсутсвует числитель дроби", "9");
+        }
+        //Отсутсвует знаменатель дроби
+        if (Fraction[i] == '/' && Fraction[i + 1] == '\0')
+        {
+            throw Exception("Отсутсвует знаменатель дроби", "10");
+        }
+    }
+
+    //Выход за пределы
+    for (int i = 0; i < lenght; i++)
+    {
+        if (Fraction[i] == 'M')
+        {
+            countM++;
+            if (countM == 10 && Fraction[i + 1] != '/' && Fraction[i + 1] != '\0')
+            {
+                throw Exception("Число  не принадлежит диапазону [1… 10000]", "11");
+            }
+        }
+    }
+
+    //Неверные сочетания с цифрами I V X L D
+    if (Fraction.find("IL") != -1 || Fraction.find("IC") != string::npos || Fraction.find("ID") != string::npos || Fraction.find("IM") != string::npos || Fraction.find("VV") != string::npos || Fraction.find("VX") != string::npos || Fraction.find("VL") != string::npos || Fraction.find("VC") != string::npos || Fraction.find("VD") != string::npos || Fraction.find("VM") != string::npos || Fraction.find("XD") != string::npos || Fraction.find("XM") != string::npos || Fraction.find("LL") != string::npos || Fraction.find("LC") != string::npos || Fraction.find("LD") != string::npos || Fraction.find("LM") != string::npos || Fraction.find("DD") != string::npos || Fraction.find("DM") != string::npos)
+    {
+        throw Exception("Число не соответствует правилам записи римских цифр", "12");
+    }
+
+    //Неверные сочетания с цифрами больше 1-го I X C перед числами
+    if (Fraction.find("IIV") != string::npos || Fraction.find("IIX") != string::npos || Fraction.find("XXL") != string::npos || Fraction.find("XXC") != string::npos || Fraction.find("CCD") != string::npos || Fraction.find("CCM") != string::npos)
+    {
+        throw Exception("Число не соответствует правилам записи римских цифр", "12");
+    }
+    //Проверка на повтор больше 3-х раз
+    if (Fraction.find("IIII") != string::npos || Fraction.find("XXXX") != string::npos || Fraction.find("CCCC") != string::npos)
+    {
+        throw Exception("Число не соответствует правилам записи римских цифр", "12");
+    }
+
+    return Fraction;
+}
