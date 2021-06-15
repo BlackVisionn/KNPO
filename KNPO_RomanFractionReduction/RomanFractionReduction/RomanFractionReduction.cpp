@@ -4,33 +4,34 @@
 #include "Prototypes.h"
 #include <Windows.h>
 using namespace std;
-int main()
+int main(int argc, char* argv[])
 {
     SetConsoleCP(1251); // Установка кодовой страницы win-cp 1251 в поток ввода
-    SetConsoleOutputCP(1251); // Установка кодовой страницы win-cp 1251 в поток вывода
-    string pathIn; // ПутЬ к файлу с входными данными
-    string pathOut; // Путь к файлу с входными данными
+    SetConsoleOutputCP(1251); // Установка кодовой страницы win-cp 1251 в поток вывода    
     string Fraction; // Римская дробь
     string ErrorMessage; // Сообщение об ошибке
-    cout << "Введите путь к файлу с входными данными: ";
-    cin >> pathIn; // Ввод пути к файлу с входными данными
-    cout << "\nВведите путь к файлу с результатом выполнения программы: ";
-    cin >> pathOut; // Ввод пути к файлу с результатом выполнения программы
-
+    
     try
     {
-        Fraction = readFile(pathIn); // Считывание входных данных из файла
+        if (argc == 3)
+        {
+            Fraction = readFile(argv[1]); // Считывание входных данных из файла       
 
-        FractionCheck(Fraction); // Проверка правильности введенной дроби
+            FractionCheck(Fraction); // Проверка правильности введенной дроби
 
-        Fraction = FormationOfAbbreviatedRomanFraction(Fraction); // Сокращение римской дроби
+            Fraction = FormationOfAbbreviatedRomanFraction(Fraction); // Сокращение римской дроби
 
-        writeToFile(Fraction, pathOut); // Запись результата выполнения программы в файл
+            writeToFile(Fraction, argv[2]); // Запись результата выполнения программы в файл
+        }
+        else
+        {
+            throw Exception("Отсутствует нужное кол-во аргументов командной строки.", "0");
+        }
     }
     catch (Exception& exception)
     {
         // Если коды ошибок равны ошибкам считывания и записи в файл, то выводим ошибку в консоль
-        if (exception.getErrorCode() == "1" || exception.getErrorCode() == "2" || exception.getErrorCode() == "3" || exception.getErrorCode() == "4")
+        if (exception.getErrorCode() == "0" || exception.getErrorCode() == "1" || exception.getErrorCode() == "2" || exception.getErrorCode() == "3" || exception.getErrorCode() == "4")
         {
             cout << exception.what() << ". " << "Код ошибки: " << exception.getErrorCode();
             return 0;
@@ -39,7 +40,7 @@ int main()
         else
         {
             ErrorMessage = ErrorMessage + exception.what() + ". " + "Код ошибки: " + exception.getErrorCode();
-            writeToFile(ErrorMessage, pathOut);
+            writeToFile(ErrorMessage, argv[2]);
         }
     }
 
@@ -86,7 +87,7 @@ string readFile(string path)
     // У файла отсутствует расширение
     if (path.find(".txt") == string::npos)
     {
-        throw Exception("Отсутствует расширение файла", "1");
+        throw Exception("Отсутствует нужное расширение файла.", "1");
     }
     // Получение расширения файла
     else
@@ -124,39 +125,39 @@ string readFile(string path)
 */
 void writeToFile(string Result, string pathOut)
 {
-    string fileExtension; // Расширение файла
+    string file_Extension; // Расширение файла
     const string exp_fileExtension = ".txt"; // Ожидаемое расширение файла
-      
-    // У файла отсутствует расширение
+
+     // У файла отсутствует расширение 
     if (pathOut.find(".txt") == string::npos)
     {
-        throw Exception("Отсутствует расширение файла", "1");
-    }
+        throw Exception("Отсутствует нужное расширение файла. Код ошибки: ", "1");
+    }    
     // Получение расширения файла
     else
     {
-        fileExtension = pathOut.substr(pathOut.find_last_of('.'));
+        file_Extension = pathOut.substr(pathOut.find_last_of('.'));
     }
 
     // Было неверно указано расширение файла
-    if (exp_fileExtension != fileExtension)
+    if (exp_fileExtension != file_Extension)
     {
         throw Exception("Неверно указано расширение файла. Файл должен иметь расширение .txt", "2");
     }
 
     // Запись результата работы программы в файл
-    ofstream writeToFile;
-    writeToFile.open(pathOut);
-    if (!writeToFile.is_open()) // Неверный путь к файлу
+    ofstream writeFile;
+    writeFile.open(pathOut);
+    if (!writeFile.is_open()) // Неверный путь к файлу
     {
         throw Exception("Неверно указан файл с выходными данными. Возможно файл не существует", "4");
     }
     // Непосредственно запись результата работы программы в файл
     else
     {
-        writeToFile << Result;
+        writeFile << Result;
     }
-    writeToFile.close(); // Закрытие файла
+    writeFile.close(); // Закрытие файла
 }
 
 /*! Перевод римского числа в арабское
