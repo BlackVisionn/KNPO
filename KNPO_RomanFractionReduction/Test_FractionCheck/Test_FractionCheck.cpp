@@ -12,9 +12,9 @@ namespace TestFractionCheck
 
 		TEST_METHOD(EmptyString)
 		{
-			string Fraction = " ";
+			string Fraction = "";
 			string result;
-			string exp_result = "Введена пустая строка. Код Ошибки: 1";
+			string exp_result = "5";
 			result = getStringFromFunc(Fraction);
 
 			Assert::AreEqual(exp_result, result);
@@ -22,9 +22,9 @@ namespace TestFractionCheck
 
 		TEST_METHOD(UnacceptableSymbols)
 		{
-			string Fraction = "ds";
+			string Fraction = "ds/I";
 			string result;
-			string exp_result = "Введены недопустимые символы. Используйте I, V, X, L, C, D, M для записи римского числа. Код Ошибки: 2";
+			string exp_result = "8";
 			result = getStringFromFunc(Fraction);
 
 			Assert::AreEqual(exp_result, result);
@@ -34,7 +34,7 @@ namespace TestFractionCheck
 		{
 			string Fraction = "X*V";
 			string result;
-			string exp_result = "Введены недопустимый символ между числами. Используйте символ деления “/”. Код Ошибки: 3";
+			string exp_result = "6";
 			result = getStringFromFunc(Fraction);
 
 			Assert::AreEqual(exp_result, result);
@@ -42,9 +42,9 @@ namespace TestFractionCheck
 
 		TEST_METHOD(InvalidStringFormat)
 		{
-			string Fraction = "X	/	V";
+			string Fraction = "X  / V";
 			string result;
-			string exp_result = "Неверный формат записи строки. Введите дробь без пробелов и табуляций в формате “Числитель/Знаменатель”. Код Ошибки: 4";
+			string exp_result = "7";
 			result = getStringFromFunc(Fraction);
 
 			Assert::AreEqual(exp_result, result);
@@ -52,9 +52,9 @@ namespace TestFractionCheck
 
 		TEST_METHOD(TheNumberDoesNotCorrespondRulesForWritingRomanNumerals)
 		{
-			string Fraction = "IIV";
+			string Fraction = "IIV/V";
 			string result;
-			string exp_result = "Число не соответствует правилам записи римских цифр. Код Ошибки: 5";
+			string exp_result = "12";
 			result = getStringFromFunc(Fraction);
 
 			Assert::AreEqual(exp_result, result);
@@ -62,9 +62,9 @@ namespace TestFractionCheck
 
 		TEST_METHOD(NumberDoesNotBelongToRange)
 		{
-			string Fraction = "MMMMMMMMMMI";
+			string Fraction = "MMMMMMMMMMI/I";
 			string result;
-			string exp_result = "Число не принадлежит диапазону [1 … 10000]. Код Ошибки: 6";
+			string exp_result = "11";
 			result = getStringFromFunc(Fraction);
 
 			Assert::AreEqual(exp_result, result);
@@ -72,9 +72,9 @@ namespace TestFractionCheck
 
 		TEST_METHOD(TheDenominatorOfTheFractionIsMissing)
 		{
-			string Fraction = "D";
+			string Fraction = "D/";
 			string result;
-			string exp_result = "Отсутствует знаменатель дроби. Введите дробь без пробелов и табуляций в формате “Числитель/Знаменатель”. Код Ошибки: 7";
+			string exp_result = "10";
 			result = getStringFromFunc(Fraction);
 
 			Assert::AreEqual(exp_result, result);
@@ -84,7 +84,7 @@ namespace TestFractionCheck
 		{
 			string Fraction = "vii/iii";
 			string result;
-			string exp_result = "Введены недопустимые символы. Используйте I, V, X, L, C, D, M для записи римского числа. Код Ошибки: 8";
+			string exp_result = "8";
 			result = getStringFromFunc(Fraction);
 
 			Assert::AreEqual(exp_result, result);
@@ -94,7 +94,7 @@ namespace TestFractionCheck
 		{
 			string Fraction = "V/X";
 			string result;
-			string exp_result = "V/X";
+			string exp_result = "";
 			result = getStringFromFunc(Fraction);
 
 			Assert::AreEqual(exp_result, result);
@@ -109,10 +109,8 @@ namespace TestFractionCheck
 			}
 			catch (Exception& exception)
 			{
-				string = string + exception.what() + ". " + "Код ошибки: " + exception.getErrorCode();
-
-			}
-			string = FractionCheck(Fraction);
+				string = exception.getErrorCode();
+			}			
 
 			return string;
 		}

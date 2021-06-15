@@ -22,9 +22,9 @@ namespace TestFormationOfAbbreviatedRomanFraction
 
 		TEST_METHOD(NumeratorIsGreaterThanDenominatorAndFractionIsReduced)
 		{
-			string fraction = "";
+			string fraction = "X/V";
 			string reductedRomanFraction;
-			string exp_reductedRomanFraction = "";
+			string exp_reductedRomanFraction = "II";
 			reductedRomanFraction = FormationOfAbbreviatedRomanFraction(fraction);
 
 			Assert::AreEqual(exp_reductedRomanFraction, reductedRomanFraction);
