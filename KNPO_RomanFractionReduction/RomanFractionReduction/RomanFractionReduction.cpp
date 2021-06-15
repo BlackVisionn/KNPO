@@ -8,20 +8,41 @@ int main()
 {
     SetConsoleCP(1251); // Установка кодовой страницы win-cp 1251 в поток ввода
     SetConsoleOutputCP(1251); // Установка кодовой страницы win-cp 1251 в поток вывода
-    string pathIn;
-    string pathOut;
-    string Fraction;
-    cin >> pathIn;
+    string pathIn; // ПутЬ к файлу с входными данными
+    string pathOut; // Путь к файлу с входными данными
+    string Fraction; // Римская дробь
+    string ErrorMessage; // Сообщение об ошибке
+    cout << "Введите путь к файлу с входными данными: ";
+    cin >> pathIn; // Ввод пути к файлу с входными данными
+    cout << "\nВведите путь к файлу с результатом выполнения программы: ";
+    cin >> pathOut; // Ввод пути к файлу с результатом выполнения программы
+
     try
     {
-        Fraction = readFile(pathIn);
+        Fraction = readFile(pathIn); // Считывание входных данных из файла
+
+        FractionCheck(Fraction); // Проверка правильности введенной дроби
+
+        Fraction = FormationOfAbbreviatedRomanFraction(Fraction); // Сокращение римской дроби
+
+        writeToFile(Fraction, pathOut); // Запись результата выполнения программы в файл
     }
     catch (Exception& exception)
     {
-        cout << exception.what() << ". " << "Код ошибки: " << exception.getErrorCode();
-        return 0;
+        // Если коды ошибок равны ошибкам считывания и записи в файл, то выводим ошибку в консоль
+        if (exception.getErrorCode() == "1" || exception.getErrorCode() == "2" || exception.getErrorCode() == "3" || exception.getErrorCode() == "4")
+        {
+            cout << exception.what() << ". " << "Код ошибки: " << exception.getErrorCode();
+            return 0;
+        }
+        // Запись ошибки проверки дроби в файл
+        else
+        {
+            ErrorMessage = ErrorMessage + exception.what() + ". " + "Код ошибки: " + exception.getErrorCode();
+            writeToFile(ErrorMessage, pathOut);
+        }
     }
-    
+
     return 0;
 
 }
@@ -88,10 +109,9 @@ string readFile(string path)
     // Непосредственно считывание данных из файла
     else
     {
-        while (getline(readFile, Text))
-        {
-            Fraction += Text;
-        }
+        getline(readFile, Text);
+
+        Fraction += Text;         
     }
     readFile.close(); // Закрытие файла
 
@@ -518,7 +538,7 @@ string FractionCheck(string Fraction)
             countM++;
             if (countM == 10 && Fraction[i + 1] != '/' && Fraction[i + 1] != '\0')
             {
-                throw Exception("Число  не принадлежит диапазону [1… 10000]", "11");
+                throw Exception("Число не принадлежит диапазону [1… 10000]", "11");
             }
         }
     }
