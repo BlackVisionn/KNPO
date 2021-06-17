@@ -329,25 +329,24 @@ string ConvertToRimNumber(int ArabicNumber)
             RimNumber += "M";
         }
         m++;
-        if (discharges[m] != -1)
-        {
+        
             /// Разряд сотен
     case 2:
 
         /// Если разряд равен 4 то добавляем CD в строку и текущий разряд обнуляем
         if (discharges[m] == 4)
         {
-            discharges[m] = discharges[m] - 4;
+            discharges[m] = 0;
             RimNumber += "CD";
         }
         /// Если разряд равен 9 то добавляем XC в строку и текущий разряд обнуляем
         if (discharges[m] == 9)
         {
-            discharges[m] = discharges[m] - 9;
+            discharges[m] = 0;
             RimNumber += "CM";
         }
-        /// Если разряд больше или равен  5 и не равен 9 или 4, то добавляем D в строку и текущий разряд уменьшаем на 5
-        if (discharges[m] >= 5 && discharges[m] != (9 || 4))
+        /// Если разряд больше или равен  5 и не равен 9, то добавляем D в строку и текущий разряд уменьшаем на 5
+        if (discharges[m] >= 5 && discharges[m] != 9)
         {
             RimNumber += "D";
             discharges[m] = discharges[m] - 5;
@@ -358,26 +357,24 @@ string ConvertToRimNumber(int ArabicNumber)
             RimNumber += "C";
         }
         m++;
-
-        if (discharges[m] != -1)
-        {
+        
             /// Разряд десятых
     case 3:
 
         /// Если разряд равен 4 то добавляем XL в строку и текущий разряд обнуляем
         if (discharges[m] == 4)
         {
-            discharges[m] = discharges[m] - 4;
+            discharges[m] = 0;
             RimNumber += "XL";
         }
         /// Если разряд равен 9 то добавляем XC в строку и текущий разряд обнуляем
         if (discharges[m] == 9)
         {
-            discharges[m] = discharges[m] - 9;
+            discharges[m] = 0;
             RimNumber += "XC";
         }
-        /// Если разряд больше или равен  5 и не равен 9 или 4, то добавляем L в строку и текущий разряд уменьшаем на 5
-        if (discharges[m] >= 5 && discharges[m] != (9 || 4))
+        /// Если разряд больше или равен  5 и не равен 9, то добавляем L в строку и текущий разряд уменьшаем на 5
+        if (discharges[m] >= 5 && discharges[m] != 9)
         {
             RimNumber += "L";
             discharges[m] = discharges[m] - 5;
@@ -389,24 +386,23 @@ string ConvertToRimNumber(int ArabicNumber)
         }
 
         m++;
-        if (discharges[m] != -1)
-        {
+        
             /// Разряд единиц
     case 4:
         /// Если разряд равен 4 то добавляем IV в строку и текущий разряд обнуляем
         if (discharges[m] == 4)
         {
-            discharges[m] = discharges[m] - 4;
+            discharges[m] = 0;
             RimNumber += "IV";
         }
         /// Если разряд равен 9 то добавляем IX в строку и текущий разряд обнуляем
         if (discharges[m] == 9)
         {
-            discharges[m] = discharges[m] - 9;
+            discharges[m] = 0;
             RimNumber += "IX";
         }
         /// Если разряд больше или равен  5 и не равен 9 или 4, то добавляем V в строку и текущий разряд уменьшаем на 5
-        if (discharges[m] >= 5 && discharges[m] != (9 || 4))
+        if (discharges[m] >= 5 && discharges[m] != 9)
         {
             RimNumber += "V";
             discharges[m] = discharges[m] - 5;
@@ -416,9 +412,7 @@ string ConvertToRimNumber(int ArabicNumber)
         {
             RimNumber += "I";
         }
-        }
-        }
-        }
+        
     }
 
     return RimNumber;
@@ -475,8 +469,7 @@ string FormationOfAbbreviatedRomanFraction(string Fraction)
 
 /// Проверка наличия и корректности дроби
 void FractionCheck(string Fraction)
-{
-    int lenght = Fraction.length(); // Длина строки
+{   
     string numerator; // Числитель
     string denominator; // Знаменатель
     int countM = 0; // Кол-во символов M
@@ -498,7 +491,7 @@ void FractionCheck(string Fraction)
     }
 
     /// Исключение, если присутсвуют пробелы
-    for (int i = 0; i < lenght; i++)
+    for (int i = 0; i < Fraction.length(); i++)
     {
         if (Fraction[i] == ' ')
         {
@@ -507,7 +500,7 @@ void FractionCheck(string Fraction)
     }
 
     /// Исключение, если найден неизвестный символ
-    for (int i = 0; i < lenght; i++)
+    for (int i = 0; i < Fraction.length(); i++)
     {
         if ((Fraction[i] != 'I') && (Fraction[i] != 'V') && (Fraction[i] != 'X') && (Fraction[i] != 'L') && (Fraction[i] != 'C') && (Fraction[i] != 'D') && (Fraction[i] != 'M') && (Fraction[i] != '/'))
         {
@@ -516,10 +509,10 @@ void FractionCheck(string Fraction)
     }
 
     /// Исключение, если отсутствует числитель или знаменатель дроби
-    for (int i = 0; i < lenght; i++)
+    for (int i = 0; i < Fraction.length(); i++)
     {
         // Отсутсвует числитель дроби
-        if (Fraction[i] == '/' && Fraction[i - 1] == '\0')
+        if (i == 0 && Fraction[i] == '/')
         {
             throw Exception("Отсутствует числитель дроби.Введите дробь без пробелов и табуляций в формате “Числитель / Знаменатель”", "9");
         }
@@ -531,7 +524,7 @@ void FractionCheck(string Fraction)
     }
 
     /// Исключение, если число вышло за пределы
-    for (int i = 0; i < lenght; i++)
+    for (int i = 0; i < Fraction.length(); i++)
     {
         if (Fraction[i] == 'M')
         {
