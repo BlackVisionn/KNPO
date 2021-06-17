@@ -15,13 +15,17 @@ int main(int argc, char* argv[])
     {
         if (argc == 3)
         {
-            Fraction = readFile(argv[1]); // Считывание входных данных из файла       
+            /// Считывание входных данных из файла   
+            Fraction = readFile(argv[1]);      
 
-            FractionCheck(Fraction); // Проверка правильности введенной дроби
+            /// Проверка правильности введенной дроби
+            FractionCheck(Fraction);
 
-            Fraction = FormationOfAbbreviatedRomanFraction(Fraction); // Сокращение римской дроби
+            /// Сокращение римской дроби
+            Fraction = FormationOfAbbreviatedRomanFraction(Fraction);
 
-            writeToFile(Fraction, argv[2]); // Запись результата выполнения программы в файл
+            /// Запись результата выполнения программы в файл
+            writeToFile(Fraction, argv[2]); 
         }
         else
         {
@@ -30,13 +34,13 @@ int main(int argc, char* argv[])
     }
     catch (Exception& exception)
     {
-        // Если коды ошибок равны ошибкам считывания и записи в файл, то выводим ошибку в консоль
+        /// Если коды ошибок равны ошибкам считывания и записи в файл, то выводим ошибку в консоль
         if (exception.getErrorCode() == "0" || exception.getErrorCode() == "1" || exception.getErrorCode() == "2" || exception.getErrorCode() == "3" || exception.getErrorCode() == "4")
         {
             cout << exception.what() << ". " << "Код ошибки: " << exception.getErrorCode();
             return 0;
         }
-        // Запись ошибки проверки дроби в файл
+        /// Запись ошибки проверки дроби в файл
         else
         {
             ErrorMessage = ErrorMessage + exception.what() + ". " + "Код ошибки: " + exception.getErrorCode();
@@ -48,11 +52,7 @@ int main(int argc, char* argv[])
 
 }
 
-/*! Сокращение дроби
-    \param[in] numerator числитель дроби
-    \param[in] denominator знаменатель дроби
-    \param[out] массив arr заполненый сокращенными числами
-*/
+/// Сокращение дроби
 void FractionReduction(int arr[], int numerator, int denominator)
 {
     int remainder; // Остаток от деления
@@ -60,23 +60,28 @@ void FractionReduction(int arr[], int numerator, int denominator)
     int a = numerator; // Числитель
     int b = denominator; // Знаменатель
 
-    // Нахождение НОД
-    while (b) // Пока остаток от деления не будет равен 0
+    /// Нахождение НОД
+    /// Пока остаток от деления не будет равен 0
+    while (b)
     {
-        remainder = a % b; // Получаем остаток от деления
-        a = b; // Числитель заменяем на знаменатель
-        b = remainder; // Знаменатель заменяем на остаток от деления
+        /// Получаем остаток от деления
+        remainder = a % b;
+        /// Числитель заменяем на знаменатель
+        a = b;
+        /// Знаменатель заменяем на остаток от деления
+        b = remainder;
     }
     NOD = a; // Найденный НОД
-    arr[0] = numerator / NOD; // Сокращаем числитель
-    arr[1] = denominator / NOD; // Сокращаем знаменатель
+
+    /// Сокращаем числитель
+    arr[0] = numerator / NOD;
+
+    /// Сокращаем знаменатель
+    arr[1] = denominator / NOD;
 
 }
 
-/*! Считывание входных данных с txt файла по заданному пользователем пути
-    \param[in] path путь расположения txt файла
-    \param[out] Fraction строка которую ввел пользователь
-*/
+/// Считывание входных данных с txt файла по заданному пользователем пути
 string readFile(string path)
 {
     string fileExtension; // Расширение файла
@@ -84,102 +89,103 @@ string readFile(string path)
     string Text; // Текст получаемый из файла
     string Fraction; // Полученное содержимое файла
 
-    // У файла отсутствует расширение
+    /// У файла отсутствует расширение
     if (path.find(".txt") == string::npos)
     {
         throw Exception("Отсутствует нужное расширение файла.", "1");
     }
-    // Получение расширения файла
+    /// Получение расширения файла
     else
     {
         fileExtension = path.substr(path.find_last_of('.'));
     }    
 
-    // Было неверно указано расширение файла
+    /// Было неверно указано расширение файла
     if (exp_fileExtension != fileExtension)
     {
         throw Exception("Неверно указано расширение файла. Файл должен иметь расширение .txt", "2");        
     }
 
-    // Считывание содержимого из файла
+    /// Считывание содержимого из файла
     ifstream readFile(path); 
     if (!readFile.is_open()) // Неверный путь к файлу
     {
         throw Exception("Неверно указан файл с входными данными. Возможно файл не существует", "3");        
     }
-    // Непосредственно считывание данных из файла
+    /// Непосредственно считывание данных из файла
     else
     {
         getline(readFile, Text);
 
         Fraction += Text;         
     }
-    readFile.close(); // Закрытие файла
+    /// Сокращаем знаменатель
+    readFile.close();
 
-    return Fraction; // Полученное содержимое файла 
+    /// Полученное содержимое файла 
+    return Fraction;
 
 }
 
-/*! Запись результата выполнения программы в txt файл
-    \param[in] FinalFraction результат выполнения программы
-*/
+/// Запись результата выполнения программы в txt файл
 void writeToFile(string Result, string pathOut)
 {
     string file_Extension; // Расширение файла
     const string exp_fileExtension = ".txt"; // Ожидаемое расширение файла
 
-     // У файла отсутствует расширение 
+     /// У файла отсутствует расширение 
     if (pathOut.find(".txt") == string::npos)
     {
         throw Exception("Отсутствует нужное расширение файла. Код ошибки: ", "1");
     }    
-    // Получение расширения файла
+    /// Получение расширения файла
     else
     {
         file_Extension = pathOut.substr(pathOut.find_last_of('.'));
     }
 
-    // Было неверно указано расширение файла
+    /// Было неверно указано расширение файла
     if (exp_fileExtension != file_Extension)
     {
         throw Exception("Неверно указано расширение файла. Файл должен иметь расширение .txt", "2");
     }
 
-    // Запись результата работы программы в файл
+    /// Запись результата работы программы в файл
     ofstream writeFile;
     writeFile.open(pathOut);
-    if (!writeFile.is_open()) // Неверный путь к файлу
+    /// Неверный путь к файлу
+    if (!writeFile.is_open())
     {
         throw Exception("Неверно указан файл с выходными данными. Возможно файл не существует", "4");
     }
-    // Непосредственно запись результата работы программы в файл
+    /// Непосредственно запись результата работы программы в файл
     else
     {
         writeFile << Result;
     }
-    writeFile.close(); // Закрытие файла
+    /// Закрытие файла
+    writeFile.close();
 }
 
-/*! Перевод римского числа в арабское
-    \param[in] RimNumber строка содержащая число в римской системе счисления
-    \param[out] ArabiсNumber арабское число переведеденное из римской системы счисления
-*/
+/// Перевод римского числа в арабское
 int ConvertToArabicNumber(string RimNumber)
 {
     int ArabicNumber = 0;
 
     for (int i = 0; i < RimNumber.length(); i++)
     {
-        //Если встретился символ I
+        /// Увеличить арабское число на 1, если встретился символ I
         if (RimNumber[i] == 'I')
         {
             ArabicNumber += 1;
+            /// Увеличить арабское число на 3, если следующий символ V
             if (RimNumber[i + 1] == 'V')
             {
                 ArabicNumber += 3;
                 i++;
                 continue;
             }
+            /// Увеличить арабское число на 8, если следующий символ X
             if (RimNumber[i + 1] == 'X')
             {
                 ArabicNumber += 8;
@@ -188,25 +194,25 @@ int ConvertToArabicNumber(string RimNumber)
             }
         }
 
-        //Если встретился символ V
+        /// Увеличить арабское число на 5, если встретился символ V
         if (RimNumber[i] == 'V')
         {
             ArabicNumber += 5;            
         }
 
-        //Если встретился символ X
+        /// Увеличить арабское число на 10, если встретился символ X
         if (RimNumber[i] == 'X')
         {
             ArabicNumber += 10;
            
-            //Если следующий элемент 50
+            /// Увеличить арабское число на 30, если следующий символ L
             if (RimNumber[i + 1] == 'L')
             {
                 ArabicNumber += 30;
                 i++;
                 continue;
             }
-            //Если следующий элемент 100
+            /// Увеличить арабское число на 80, если следующий символ C
             if (RimNumber[i + 1] == 'C')
             {
                 ArabicNumber += 80;
@@ -215,25 +221,25 @@ int ConvertToArabicNumber(string RimNumber)
             }
         }
 
-        //Если встретился символ L
+        /// Увеличить арабское число на 50, если встретился символ L
         if (RimNumber[i] == 'L')
         {
             ArabicNumber += 50;            
         }
 
-        //Если встретился символ C
+        /// Увеличить арабское число на 100, если встретился символ C
         if (RimNumber[i] == 'C')
         {
             ArabicNumber += 100;            
 
-            //Если следующий элемент 500
+            /// Увеличить арабское число на 300, если следующий символ D
             if (RimNumber[i + 1] == 'D')
             {
                 ArabicNumber += 300;
                 i++;
                 continue;
             }
-            //Если следующий элемент 1000
+            /// Увеличить арабское число на 800, если следующий символ M
             if (RimNumber[i + 1] == 'M')
             {
                 ArabicNumber += 800;
@@ -242,13 +248,13 @@ int ConvertToArabicNumber(string RimNumber)
             }
         }
 
-        //Если встретился символ D        
+        /// Увеличить арабское число на 500, если встретился символ D       
         if (RimNumber[i] == 'D')
         {
             ArabicNumber += 500;            
         }
 
-        //Если встретился символ M
+        /// Увеличить арабское число на 1000, если встретился символ M
         if (RimNumber[i] == 'M')
         {
             ArabicNumber += 1000;            
@@ -258,26 +264,25 @@ int ConvertToArabicNumber(string RimNumber)
     return ArabicNumber;
 }
 
-/*! Перевод арабского числа в римское
-    \param[in] ArabicNumber число записанное в арабской системе счисления
-    \param[out] RimNumber строка содержащая римское число переведенное из арабской системы счисления
-*/
+/// Перевод арабского числа в римское
 string ConvertToRimNumber(int ArabicNumber)
 {
-    string RimNumber;
-    //int ArabicNumber = num;
+    string RimNumber;    
     int discharges[4] = {}; // массив разрядов числа
     int k = 1000;
     int m = 0;
     int casenum;
-    // Разбиение числа на разряды тысяч, сотен, десяток , единиц и запись в массив кажжого разряда
+    /// Разбиение числа на разряды тысяч, сотен, десяток , единиц и запись в массив кажжого разряда
     for (int i = 0; i < 4; i++)
     {
-        discharges[i] = ArabicNumber / k; // Получение соответсвующего разряда, если у числа не будет определенный разряд (Наример разряд тысяч), то в массив будет записан ноль
-        ArabicNumber %= k; //  Делим текущее число на 1000 и заменяем текущее число на остаток от деления, тем самым убрав разряд тысяч (в дальнейшем сотен, десяток и единиц)
-        k = k / 10; //Уменьшаем 1000 в 10 раз
+        /// Получение соответсвующего разряда, если у числа не будет определенный разряд (Наример разряд тысяч), то в массив будет записан ноль
+        discharges[i] = ArabicNumber / k;
+        /// Делим текущее число на 1000 и заменяем текущее число на остаток от деления, тем самым убрав разряд тысяч (в дальнейшем сотен, десяток и единиц)
+        ArabicNumber %= k;
+        /// Уменьшаем 1000 в 10 раз
+        k = k / 10;
     }
-    // Замена отсутсвующих разрядов на -1
+    /// Замена отсутсвующих разрядов на -1
     for (int i = 0; i < 4; i++)
     {
         if (discharges[i] == 0)
@@ -290,24 +295,24 @@ string ConvertToRimNumber(int ArabicNumber)
         }
     }
 
-    // Если разряд тысяч присутствует (не является -1), то переходим к переводу числа с  момента перевода разряда тысяч
+    /// Если разряд тысяч присутствует (не является -1), то переходим к переводу числа с  момента перевода разряда тысяч
     if (discharges[0] != -1)
     {
         casenum = 1;
     }
-    // Если разряд сотен присутствует (не является -1), то переходим к переводу числа с  момента перевода разряда сотен
+    /// Если разряд сотен присутствует (не является -1), то переходим к переводу числа с  момента перевода разряда сотен
     else if (discharges[1] != -1)
     {
         casenum = 2;
         m += 1;
     }
-    // Если разряд десятых присутствует (не является -1), то переходим к переводу числа с  момента перевода разряда десятых
+    /// Если разряд десятых присутствует (не является -1), то переходим к переводу числа с  момента перевода разряда десятых
     else if (discharges[2] != -1)
     {
         casenum = 3;
         m += 2;
     }
-    // Если разряд единиц присутствует (не является -1), то переходим к переводу числа с  момента перевода разряда единиц
+    /// Если разряд единиц присутствует (не является -1), то переходим к переводу числа с  момента перевода разряда единиц
     else if (discharges[3] != -1)
     {
         casenum = 4;
@@ -316,9 +321,9 @@ string ConvertToRimNumber(int ArabicNumber)
 
     switch (casenum)
     {
-        // Разряд тысяч
+        /// Разряд тысяч
     case 1:
-        // Добавляем цифру M столько раз сколько указано в массиве в разряде тысяч
+        /// Добавляем цифру M столько раз сколько указано в массиве в разряде тысяч
         for (int i = 0; i < discharges[0]; i++)
         {
             RimNumber += "M";
@@ -326,28 +331,28 @@ string ConvertToRimNumber(int ArabicNumber)
         m++;
         if (discharges[m] != -1)
         {
-            // Разряд сотен
+            /// Разряд сотен
     case 2:
 
-        // Если разряд равен 4 то добавляем CD в строку и текущий разряд обнуляем
+        /// Если разряд равен 4 то добавляем CD в строку и текущий разряд обнуляем
         if (discharges[m] == 4)
         {
             discharges[m] = discharges[m] - 4;
             RimNumber += "CD";
         }
-        // Если разряд равен 9 то добавляем XC в строку и текущий разряд обнуляем
+        /// Если разряд равен 9 то добавляем XC в строку и текущий разряд обнуляем
         if (discharges[m] == 9)
         {
             discharges[m] = discharges[m] - 9;
             RimNumber += "CM";
         }
-        // Если разряд больше или равен  5 и не равен 9 или 4, то добавляем D в строку и текущий разряд уменьшаем на 5
+        /// Если разряд больше или равен  5 и не равен 9 или 4, то добавляем D в строку и текущий разряд уменьшаем на 5
         if (discharges[m] >= 5 && discharges[m] != (9 || 4))
         {
             RimNumber += "D";
             discharges[m] = discharges[m] - 5;
         }
-        // Цикл который добавляет цифру C столько раз сколько указано в массиве в разряде сотен
+        /// Цикл который добавляет цифру C столько раз сколько указано в массиве в разряде сотен
         for (int i = 0; i < discharges[m]; i++)
         {
             RimNumber += "C";
@@ -356,28 +361,28 @@ string ConvertToRimNumber(int ArabicNumber)
 
         if (discharges[m] != -1)
         {
-            // Разряд десятых
+            /// Разряд десятых
     case 3:
 
-        // Если разряд равен 4 то добавляем XL в строку и текущий разряд обнуляем
+        /// Если разряд равен 4 то добавляем XL в строку и текущий разряд обнуляем
         if (discharges[m] == 4)
         {
             discharges[m] = discharges[m] - 4;
             RimNumber += "XL";
         }
-        // Если разряд равен 9 то добавляем XC в строку и текущий разряд обнуляем
+        /// Если разряд равен 9 то добавляем XC в строку и текущий разряд обнуляем
         if (discharges[m] == 9)
         {
             discharges[m] = discharges[m] - 9;
             RimNumber += "XC";
         }
-        // Если разряд больше или равен  5 и не равен 9 или 4, то добавляем L в строку и текущий разряд уменьшаем на 5
+        /// Если разряд больше или равен  5 и не равен 9 или 4, то добавляем L в строку и текущий разряд уменьшаем на 5
         if (discharges[m] >= 5 && discharges[m] != (9 || 4))
         {
             RimNumber += "L";
             discharges[m] = discharges[m] - 5;
         }
-        // Цикл который добавляет цифру X столько раз сколько указано в массиве в разряде десятых
+        /// Цикл который добавляет цифру X столько раз сколько указано в массиве в разряде десятых
         for (int i = 0; i < discharges[m]; i++)
         {
             RimNumber += "X";
@@ -386,27 +391,27 @@ string ConvertToRimNumber(int ArabicNumber)
         m++;
         if (discharges[m] != -1)
         {
-            // Разряд единиц
+            /// Разряд единиц
     case 4:
-        // Если разряд равен 4 то добавляем IV в строку и текущий разряд обнуляем
+        /// Если разряд равен 4 то добавляем IV в строку и текущий разряд обнуляем
         if (discharges[m] == 4)
         {
             discharges[m] = discharges[m] - 4;
             RimNumber += "IV";
         }
-        // Если разряд равен 9 то добавляем IX в строку и текущий разряд обнуляем
+        /// Если разряд равен 9 то добавляем IX в строку и текущий разряд обнуляем
         if (discharges[m] == 9)
         {
             discharges[m] = discharges[m] - 9;
             RimNumber += "IX";
         }
-        // Если разряд больше или равен  5 и не равен 9 или 4, то добавляем V в строку и текущий разряд уменьшаем на 5
+        /// Если разряд больше или равен  5 и не равен 9 или 4, то добавляем V в строку и текущий разряд уменьшаем на 5
         if (discharges[m] >= 5 && discharges[m] != (9 || 4))
         {
             RimNumber += "V";
             discharges[m] = discharges[m] - 5;
         }
-        // Цикл который добавляет цифру I столько раз сколько указано в массиве в разряде единиц
+        /// Цикл который добавляет цифру I столько раз сколько указано в массиве в разряде единиц
         for (int i = 0; i < discharges[m]; i++)
         {
             RimNumber += "I";
@@ -419,10 +424,7 @@ string ConvertToRimNumber(int ArabicNumber)
     return RimNumber;
 }
 
-/*! Формирование сокращенной римской дроби
-    \param[in] RimNumber строка которую ввел пользователь
-    \param[out] FinalFraction сокращенная дробь в римской системе счисления, записанная в виде строки
-*/
+/// Формирование сокращенной римской дроби
 string FormationOfAbbreviatedRomanFraction(string Fraction)
 {
     string RimNumerator; // Числитель в римской системе счисления
@@ -436,46 +438,43 @@ string FormationOfAbbreviatedRomanFraction(string Fraction)
     RimNumerator = Fraction.substr(0, Fraction.find('/')); // Числитель дроби в римской системе счисления
     RimDenominator = Fraction.substr(Fraction.find('/') + 1); // Знаменатель дроби в римской системе счисления
 
-    // Перевод числителя и знаменателя в арабскую систему счисления
+    /// Перевод числителя и знаменателя в арабскую систему счисления
     ArabicNumerator = ConvertToArabicNumber(RimNumerator);
 
     ArabicDenominator = ConvertToArabicNumber(RimDenominator);
 
-    // Сокращение числителя и знаменателя дроби
+    /// Сокращение числителя и знаменателя дроби
     FractionReduction(AbbreviatedValues, ArabicNumerator, ArabicDenominator);
 
-    // Присвоение сокращенных значений числителя и знаменателя
+    /// Присвоение сокращенных значений числителя и знаменателя
     ArabicNumerator = AbbreviatedValues[0];
     ArabicDenominator = AbbreviatedValues[1];
     
-    // Если после сокращения знаменатель 1
+    /// Если после сокращения знаменатель 1
     if (ArabicDenominator == 1)
     {
-        // Перевести числитель в римскую систему счисления
+        /// Перевести числитель в римскую систему счисления
         RimNumerator = ConvertToRimNumber(ArabicNumerator);
 
-        // Сбор сокращенной дроби в римской системе счисления
+        /// Сбор сокращенной дроби в римской системе счисления
         AbbreviatedFraction += RimNumerator;
     }
     else
     {
-        // Перевод числителя и знаменателя в римскую систему счисления
+        /// Перевод числителя и знаменателя в римскую систему счисления
         RimNumerator = ConvertToRimNumber(ArabicNumerator);
         
         RimDenominator = ConvertToRimNumber(ArabicDenominator);
 
-        // Сбор сокращенной дроби в римской системе счисления
+        /// Сбор сокращенной дроби в римской системе счисления
         AbbreviatedFraction += RimNumerator + '/' + RimDenominator;
     }
     
     return AbbreviatedFraction;
 }
 
-/*! Проверка наличия и корректности дроби
-    \param[in] Fraction строка которую ввел пользователь
-    \param[out] Fraction если содержимое прошло проверку или Error если содержимое не соответсвует заданному формату
-*/
-string FractionCheck(string Fraction)
+/// Проверка наличия и корректности дроби
+void FractionCheck(string Fraction)
 {
     int lenght = Fraction.length(); // Длина строки
     string numerator; // Числитель
@@ -486,19 +485,19 @@ string FractionCheck(string Fraction)
     numerator = Fraction.substr(0, Fraction.find('/'));
     denominator = Fraction.substr(Fraction.find('/') + 1);
 
-    //Пустая строка
+    /// Исключение, если строка пустая
     if (Fraction.empty())
     {
         throw Exception("Неудалось обнаружить дробь", "5");
     }
 
-    //Отсутсвует знак деления между римскими числами
+    /// Исключение, если отсутсвует знак деления между римскими числами
     if (Fraction.find("/") == string::npos)
     {
         throw Exception("Отсутствует знак деления между римскими числами", "6");
     }
 
-    //Присутсвуют пробелы
+    /// Исключение, если присутсвуют пробелы
     for (int i = 0; i < lenght; i++)
     {
         if (Fraction[i] == ' ')
@@ -507,7 +506,7 @@ string FractionCheck(string Fraction)
         }
     }
 
-    //Неизвестный символ используйте римские числа
+    /// Исключение, если найден неизвестный символ
     for (int i = 0; i < lenght; i++)
     {
         if ((Fraction[i] != 'I') && (Fraction[i] != 'V') && (Fraction[i] != 'X') && (Fraction[i] != 'L') && (Fraction[i] != 'C') && (Fraction[i] != 'D') && (Fraction[i] != 'M') && (Fraction[i] != '/'))
@@ -516,22 +515,22 @@ string FractionCheck(string Fraction)
         }
     }
 
-    //Отсутствие числителя или знаменателя дроби
+    /// Исключение, если отсутствует числитель или знаменатель дроби
     for (int i = 0; i < lenght; i++)
     {
-        //Отсутсвует числитель дроби
+        // Отсутсвует числитель дроби
         if (Fraction[i] == '/' && Fraction[i - 1] == '\0')
         {
             throw Exception("Отсутствует числитель дроби.Введите дробь без пробелов и табуляций в формате “Числитель / Знаменатель”", "9");
         }
-        //Отсутсвует знаменатель дроби
+        // Отсутсвует знаменатель дроби
         if (Fraction[i] == '/' && Fraction[i + 1] == '\0')
         {
             throw Exception("Отсутствует знаменатель дроби. Введите дробь без пробелов и табуляций в формате “Числитель/Знаменатель”", "10");
         }
     }
 
-    //Выход за пределы
+    /// Исключение, если число вышло за пределы
     for (int i = 0; i < lenght; i++)
     {
         if (Fraction[i] == 'M')
@@ -544,22 +543,20 @@ string FractionCheck(string Fraction)
         }
     }
 
-    //Неверные сочетания с цифрами I V X L D
+    /// Исключение, если введены неверные сочетания с цифрами I, V, X, L, D
     if (Fraction.find("IL") != -1 || Fraction.find("IC") != string::npos || Fraction.find("ID") != string::npos || Fraction.find("IM") != string::npos || Fraction.find("VV") != string::npos || Fraction.find("VX") != string::npos || Fraction.find("VL") != string::npos || Fraction.find("VC") != string::npos || Fraction.find("VD") != string::npos || Fraction.find("VM") != string::npos || Fraction.find("XD") != string::npos || Fraction.find("XM") != string::npos || Fraction.find("LL") != string::npos || Fraction.find("LC") != string::npos || Fraction.find("LD") != string::npos || Fraction.find("LM") != string::npos || Fraction.find("DD") != string::npos || Fraction.find("DM") != string::npos)
     {
         throw Exception("Число не соответствует правилам записи римских цифр", "12");
     }
 
-    //Неверные сочетания с цифрами больше 1-го I X C перед числами
+    /// Исключение, если введены неверные сочетания с цифрами больше одного I или X или C перед числами
     if (Fraction.find("IIV") != string::npos || Fraction.find("IIX") != string::npos || Fraction.find("XXL") != string::npos || Fraction.find("XXC") != string::npos || Fraction.find("CCD") != string::npos || Fraction.find("CCM") != string::npos)
     {
         throw Exception("Число не соответствует правилам записи римских цифр", "12");
     }
-    //Проверка на повтор больше 3-х раз
+    /// Исключение, если цифра записана больше 3-х раз подряд 
     if (Fraction.find("IIII") != string::npos || Fraction.find("XXXX") != string::npos || Fraction.find("CCCC") != string::npos)
     {
         throw Exception("Число не соответствует правилам записи римских цифр", "12");
-    }
-
-    return Fraction;
+    }    
 }

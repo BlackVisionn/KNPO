@@ -27,10 +27,9 @@ string ConvertToRimNumber(int ArabicNumber);
 string FormationOfAbbreviatedRomanFraction(string Fraction);
 
 /*! Проверка наличия и корректности дроби
-	\param[in] Fraction строка которую ввел пользователь
-	\param[out] Fraction если содержимое прошло проверку или Error если содержимое не соответсвует заданному формату
+	\param[in] Fraction строка которую ввел пользователь	
 */
-string FractionCheck(string Fraction);
+void FractionCheck(string Fraction);
 
 /*! Считывание входных данных с txt файла по заданному пользователем пути
 	\param[in] path путь расположения txt файла
@@ -39,10 +38,15 @@ string FractionCheck(string Fraction);
 string readFile(string path);
 
 /*! Запись результата выполнения программы в txt файл
-	\param[in] FinalFraction результат выполнения программы
+	\param[in] Result результат выполнения программы
+	\param[in] pathOut путь расположения txt файла с результатом выполнения программы 
 */
 void writeToFile(string Result, string pathOut);
 
+/*! Класс исключений программы. Унаследован от std:exception
+	\param[in|out] msg сообщение об ошибке
+	\param[in|out] errorCode код ошибки	
+*/
 class Exception :public exception
 {
 public:
