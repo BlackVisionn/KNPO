@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-            throw Exception("Отсутствует нужное кол-во аргументов командной строки.", "0");
+            throw Exception("Отсутствует нужное кол-во аргументов командной строки", "0");
         }
     }
     catch (Exception& exception)
@@ -92,7 +92,7 @@ string readFile(string path)
     /// У файла отсутствует расширение
     if (path.find(".txt") == string::npos)
     {
-        throw Exception("Отсутствует нужное расширение файла.", "1");
+        throw Exception("Отсутствует нужное расширение файла", "1");
     }
     /// Получение расширения файла
     else
@@ -136,7 +136,7 @@ void writeToFile(string Result, string pathOut)
      /// У файла отсутствует расширение 
     if (pathOut.find(".txt") == string::npos)
     {
-        throw Exception("Отсутствует нужное расширение файла. Код ошибки: ", "1");
+        throw Exception("Отсутствует нужное расширение файла", "1");
     }    
     /// Получение расширения файла
     else
